@@ -1,5 +1,4 @@
 # google-image-download
-------------------------
 
 ## Environments
 
