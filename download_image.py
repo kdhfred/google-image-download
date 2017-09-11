@@ -76,7 +76,10 @@ def download_image(save_path, link):
         print(f'Cannot get link {link}')
         return None
     
-    urllib.request.urlretrieve(link[-1], os.path.join(save_path, f'{link[0]}-{link[1]}.jpeg'))
+    try:
+        urllib.request.urlretrieve(link[-1], os.path.join(save_path, f'{link[0]}-{link[1]}.jpeg'))
+    except:
+        pass
 
     return None
 
@@ -96,10 +99,11 @@ if __name__ == '__main__':
 
     image_url = input("Type image url: ")
     image_save_prefix = input("Type image save prefix: ")
+    image_offset = int(input("Type start index: " ))
 
     html_source = search_google_image(image_url)
     image_urls = get_image_urls(html_source)
-    enum_image_urls = [(image_save_prefix, str(i), image_url) for i, image_url in enumerate(image_urls)]
+    enum_image_urls = [(image_save_prefix, str(image_offset+i), image_url) for i, image_url in enumerate(image_urls)]
     
     print(f"Found Image Count: {len(enum_image_urls)}")
     
