@@ -13,9 +13,9 @@
 ## Usage
 
 ```bash
-    python download_image.py <savepath>
+    python download_image.py <savepath> <--worker>
 ```
-* savepath has to be absolute path
+* `savepath` has to be absolute path
 
 ## Description
 
