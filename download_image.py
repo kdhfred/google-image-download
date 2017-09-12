@@ -16,14 +16,15 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
 
-def search_google_image(image_url):
+def search_google_image(image_url=None, search_url=None):
 
     def load_more_image(element):
         for _ in range(20):
             element.send_keys(Keys.END)
             time.sleep(0.2)
 
-    search_url = f'https://images.google.com/searchbyimage?image_url={image_url}&encoded_image=&image_content=&filename=&hl=ko'
+    if not search_url:
+        search_url = f'https://images.google.com/searchbyimage?image_url={image_url}&encoded_image=&image_content=&filename=&hl=ko'
     
     browser = webdriver.Chrome()
 
@@ -93,15 +94,24 @@ if __name__ == '__main__':
             type=int,
             default=4
     )
+    parser.add_argument(
+            '--google',
+            help="get url from webbrower's link box"
+    )
 
 
     args = parser.parse_args()
 
-    image_url = input("Type image url: ")
+    search_url = image_url = None 
+
+    if args.google:
+        search_url = input("Type google image url: ")
+    else:
+        image_url = input("Type image url: ")
     image_save_prefix = input("Type image save prefix: ")
     image_offset = int(input("Type start index: " ))
 
-    html_source = search_google_image(image_url)
+    html_source = search_google_image(image_url, search_url)
     image_urls = get_image_urls(html_source)
     enum_image_urls = [(image_save_prefix, str(image_offset+i), image_url) for i, image_url in enumerate(image_urls)]
     
