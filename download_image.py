@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+
 
 import argparse
 import os
@@ -26,7 +26,7 @@ def search_google_image(image_url=None, search_url=None):
     if not search_url:
         search_url = f'https://images.google.com/searchbyimage?image_url={image_url}&encoded_image=&image_content=&filename=&hl=ko'
     
-    browser = webdriver.Chrome()
+    browser = webdriver.Chrome('./chromedriver')
 
     browser.get(search_url)
     time.sleep(1)
@@ -90,18 +90,25 @@ if __name__ == '__main__':
     parser.add_argument('savepath', help='absolute save path')
     parser.add_argument(
             '--worker',
-            help='the numter of worker used for downloading images',
+            help='the number of worker used for downloading images',
             type=int,
-            default=4
+            default=16
     )
     parser.add_argument(
             '--google',
+            default=True,
             help="get url from webbrower's link box"
     )
 
-
     args = parser.parse_args()
+    import os 
+    savepath = args.savepath
+    if savepath == os.path.basename(savepath):
+        savepath = os.path.abspath(savepath)
 
+    import pdb;pdb.set_trace();
+
+  
     search_url = image_url = None 
 
     if args.google:
