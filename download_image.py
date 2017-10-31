@@ -79,20 +79,21 @@ def download_image(save_path, link):
     
     try:
         urllib.request.urlretrieve(link[-1], os.path.join(save_path, f'{link[0]}-{link[1]}.jpeg'))
-    except:
-        pass
+    except Exception as inst:
+         print(inst)          # __str__ allows args to be printed directly,
 
     return None
 
 
 if __name__ == '__main__':
+    
     parser = argparse.ArgumentParser()
-    parser.add_argument('savepath', help='absolute save path')
+    parser.add_argument('savepath', default='download_data', help='absolute save path')
     parser.add_argument(
             '--worker',
             help='the number of worker used for downloading images',
             type=int,
-            default=16
+            default=40
     )
     parser.add_argument(
             '--google',
@@ -102,20 +103,22 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     import os 
-    savepath = args.savepath
-    if savepath == os.path.basename(savepath):
-        savepath = os.path.abspath(savepath)
+    savepath = os.path.abspath(args.savepath)
+    
+    if not os.path.exists(savepath):
+        os.mkdir(savepath)
 
-    import pdb;pdb.set_trace();
-
-  
+    basename = os.path.basename(savepath)
+       
     search_url = image_url = None 
 
     if args.google:
         search_url = input("Type google image url: ")
     else:
         image_url = input("Type image url: ")
-    image_save_prefix = input("Type image save prefix: ")
+
+    image_save_prefix = input("Type image save prefix[" + basename + " if enter]:") or basename
+    
     image_offset = int(input("Type start index: " ))
 
     html_source = search_google_image(image_url, search_url)
